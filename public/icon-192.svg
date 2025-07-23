@@ -1,0 +1,16 @@
+<svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- White background -->
+  <rect width="192" height="192" fill="#FFFFFF"/>
+
+  <!-- Outer border frame -->
+  <rect x="20" y="60" width="152" height="72" stroke="#000000" stroke-width="3" fill="none"/>
+
+  <!-- E-CELL text with exact styling -->
+  <text x="30" y="105" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#000000" letter-spacing="2">E-CELL</text>
+
+  <!-- Separator line -->
+  <line x1="30" y1="115" x2="162" y2="115" stroke="#000000" stroke-width="1"/>
+
+  <!-- RAGHU ENGINEERING COLLEGE text -->
+  <text x="30" y="125" font-family="Arial, sans-serif" font-size="8" fill="#000000" letter-spacing="2">RAGHU ENGINEERING COLLEGE</text>
+</svg>

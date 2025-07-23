@@ -179,7 +179,9 @@ export default function RegisterPage() {
 
                   {/* Branch */}
                   <div className="space-y-2">
-                    <Label htmlFor="branch">Branch</Label>
+                    <div className="flex items-center gap-2 min-h-[20px]">
+                      <Label htmlFor="branch">Branch</Label>
+                    </div>
                     <Select onValueChange={(value) => setValue("branch", value)}>
                       <SelectTrigger className="bg-background/50">
                         <SelectValue placeholder="Select Your Branch" />
@@ -199,7 +201,7 @@ export default function RegisterPage() {
 
                   {/* Year */}
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 min-h-[20px]">
                       <Label htmlFor="year">Current Year</Label>
                       <InfoTooltip content="Select your current academic year" />
                     </div>
@@ -222,7 +224,9 @@ export default function RegisterPage() {
 
                   {/* Graduation Year */}
                   <div className="space-y-2">
-                    <Label htmlFor="graduationYear">Graduation Year</Label>
+                    <div className="flex items-center gap-2 min-h-[20px]">
+                      <Label htmlFor="graduationYear">Graduation Year</Label>
+                    </div>
                     <Select onValueChange={(value) => setValue("graduationYear", value)}>
                       <SelectTrigger className="bg-background/50">
                         <SelectValue placeholder="Select Graduation Year" />
@@ -242,7 +246,9 @@ export default function RegisterPage() {
 
                   {/* Phone Number */}
                   <div className="space-y-2">
-                    <Label htmlFor="phoneNumber">Phone Number</Label>
+                    <div className="flex items-center gap-2 min-h-[20px]">
+                      <Label htmlFor="phoneNumber">Phone Number</Label>
+                    </div>
                     <Input
                       id="phoneNumber"
                       type="tel"

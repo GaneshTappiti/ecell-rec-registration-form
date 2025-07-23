@@ -9,6 +9,15 @@ export const metadata: Metadata = {
   title: 'E-Cell Startup Portal',
   description: 'Startup Submission Portal for E-Cell, Raghu Engineering College',
   authors: [{ name: 'Ganesh Tappiti', email: 'tappitiganesh@gmail.com' }],
+  manifest: '/manifest.json',
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' }
+    ],
+    apple: '/icon-192.svg',
+    shortcut: '/favicon.svg'
+  }
 }
 
 export default function RootLayout({

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Eye, Rocket, Users, MessageCircle, ExternalLink, Plus } from "lucide-react";
+import { CheckCircle, Eye, Rocket, Users, MessageCircle, ExternalLink, Plus, Shield, Mail } from "lucide-react";
 import { ECellLogo } from "@/components/ECellLogo";
 
 interface User {
@@ -215,6 +215,53 @@ export default function ConfirmationPage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* E-Cell Startup Assistance Team Monitoring Block */}
+          <div className="p-8 rounded-xl bg-gradient-to-br from-[#3b0764] to-[#1e1b4b] text-white shadow-xl border border-purple-600/30">
+            <div className="flex items-start gap-4">
+              <Shield className="w-8 h-8 text-purple-300 mt-1 flex-shrink-0" />
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-white mb-3 flex items-center gap-2">
+                  🛡️ Monitored by E-Cell Startup Assistance Team
+                </h3>
+                <p className="text-gray-200 mb-6 leading-relaxed text-lg">
+                  Your submission will be personally reviewed and monitored by the Startup Assistance Lead and the E-Cell Mentorship Committee.
+                </p>
+
+                <div className="space-y-4 mb-6">
+                  <p className="text-sm font-semibold text-purple-300">We're committed to supporting your entrepreneurial journey by:</p>
+                  <ul className="list-disc list-inside text-sm text-gray-300 space-y-2 ml-4">
+                    <li>Guiding you through validation & MVP stages</li>
+                    <li>Providing feedback on your pitch deck</li>
+                    <li>Preparing you for Demo Day and Incubator rounds</li>
+                    <li>Connecting promising teams to funding and campus opportunities</li>
+                  </ul>
+                </div>
+
+                <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg border border-white/20">
+                  <p className="text-sm font-semibold text-purple-300 mb-3 flex items-center gap-2">
+                    📞 Contact Information:
+                  </p>
+                  <div className="space-y-2 text-sm text-gray-200">
+                    <div className="flex items-center gap-3">
+                      <Users className="w-4 h-4 text-purple-300" />
+                      <span><strong>Ganesh Tappiti</strong> — Startup Assistance Lead</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Mail className="w-4 h-4 text-purple-300" />
+                      <a href="mailto:tappitiganesh@gmail.com" className="text-purple-300 hover:text-white hover:underline">
+                        tappitiganesh@gmail.com
+                      </a>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <ExternalLink className="w-4 h-4 text-purple-300" />
+                      <span>Raghu Engineering College (E-Cell REC)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Back to Home */}
           <div className="text-center">

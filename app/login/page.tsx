@@ -90,7 +90,7 @@ export default function LoginPage() {
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
                 {/* Email or Roll Number */}
                 <div className="space-y-2">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 min-h-[20px]">
                     <Label htmlFor="emailOrRoll">College Email ID</Label>
                     <InfoTooltip content="Use your college email ID ending with @raghuenggcollege.in" />
                   </div>
