@@ -36,7 +36,7 @@ All colors MUST be HSL.
     --input: 240 3.7% 15.9%;
     --ring: 263 70% 50%;
 
-    /* Custom design tokens for PromptForge */
+    /* Custom design tokens for the portal */
     --gradient-primary: linear-gradient(135deg, hsl(263 70% 50%), hsl(280 70% 60%));
     --gradient-secondary: linear-gradient(135deg, hsl(240 10% 3.9%), hsl(240 3.7% 15.9%));
     --gradient-accent: linear-gradient(135deg, hsl(180 100% 50%), hsl(200 100% 60%));

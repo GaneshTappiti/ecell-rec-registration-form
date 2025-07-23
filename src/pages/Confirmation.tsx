@@ -3,7 +3,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, CheckCircle, Eye, Rocket, Users, MessageCircle } from "lucide-react";
+import { CheckCircle, Eye, Rocket, Users, MessageCircle } from "lucide-react";
+import { ECellLogo } from "@/components/ECellLogo";
 
 interface User {
   name: string;
@@ -76,83 +77,83 @@ export default function Confirmation() {
       
       <div className="container mx-auto px-6 py-8 relative z-10">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-card/50 backdrop-blur-sm mb-6">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium">E-Cell</span>
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/20 bg-card/50 backdrop-blur-sm mb-4">
+            <ECellLogo size="sm" className="text-primary" />
+            <span className="text-xs font-medium">E-Cell</span>
           </div>
-          
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-primary mb-6">
-            <CheckCircle className="w-10 h-10 text-white" />
+
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-primary mb-4">
+            <CheckCircle className="w-8 h-8 text-white" />
           </div>
-          
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
+
+          <h1 className="text-2xl md:text-3xl font-bold mb-3 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
             Thanks for submitting, {user.name.split(' ')[0]}! 👋
           </h1>
-          
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+
+          <p className="text-sm text-muted-foreground mb-6 max-w-xl mx-auto">
             Your startup idea has been received successfully. Our team will review your submission and get back to you soon.
           </p>
         </div>
 
         {/* Submission Summary */}
-        <div className="max-w-2xl mx-auto mb-12">
+        <div className="max-w-xl mx-auto mb-8">
           <Card className="bg-card/50 backdrop-blur-sm border-primary/20">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Rocket className="w-5 h-5 text-primary" />
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-base">
+                <Rocket className="w-4 h-4 text-primary" />
                 Submission Summary
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <CardContent className="space-y-3 pt-0">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <h4 className="font-medium text-sm text-muted-foreground mb-1">Startup Title</h4>
-                  <p className="font-medium">{submission.ideaTitle}</p>
+                  <h4 className="font-medium text-xs text-muted-foreground mb-1">Startup Title</h4>
+                  <p className="font-medium text-sm">{submission.ideaTitle}</p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-sm text-muted-foreground mb-1">Submission ID</h4>
-                  <p className="font-mono text-sm">{user.rollNumber}-{new Date(submission.submittedAt).getTime().toString().slice(-6)}</p>
+                  <h4 className="font-medium text-xs text-muted-foreground mb-1">Submission ID</h4>
+                  <p className="font-mono text-xs">{user.rollNumber}-{new Date(submission.submittedAt).getTime().toString().slice(-6)}</p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-sm text-muted-foreground mb-1">Submitted On</h4>
-                  <p className="text-sm">{submissionDate}</p>
+                  <h4 className="font-medium text-xs text-muted-foreground mb-1">Submitted On</h4>
+                  <p className="text-xs">{submissionDate}</p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-sm text-muted-foreground mb-1">Status</h4>
-                  <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/50">
+                  <h4 className="font-medium text-xs text-muted-foreground mb-1">Status</h4>
+                  <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/50 text-xs">
                     Under Review
                   </Badge>
                 </div>
               </div>
-              
-              <div className="pt-4 border-t border-border">
-                <h4 className="font-medium text-sm text-muted-foreground mb-2">One-line Pitch</h4>
-                <p className="italic">"{submission.oneLinerPitch}"</p>
+
+              <div className="pt-3 border-t border-border">
+                <h4 className="font-medium text-xs text-muted-foreground mb-2">One-line Pitch</h4>
+                <p className="italic text-sm">"{submission.oneLinerPitch}"</p>
               </div>
             </CardContent>
           </Card>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-          <Button 
+        <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8">
+          <Button
             onClick={handleViewSubmission}
             className="bg-gradient-primary hover:shadow-glow-primary transition-all duration-300"
-            size="lg"
+            size="default"
           >
-            <Eye className="mr-2 w-5 h-5" />
+            <Eye className="mr-2 w-4 h-4" />
             View My Submission
           </Button>
-          
-          <Button 
-            variant="outline" 
-            size="lg"
+
+          <Button
+            variant="outline"
+            size="default"
             onClick={() => navigate("/dashboard")}
             className="border-primary/30 hover:bg-primary/10"
             disabled
           >
-            <Rocket className="mr-2 w-5 h-5" />
+            <Rocket className="mr-2 w-4 h-4" />
             Submit Another Idea
           </Button>
         </div>

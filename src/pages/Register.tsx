@@ -7,7 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Sparkles, Eye, EyeOff, Rocket } from "lucide-react";
+import { Eye, EyeOff, Rocket } from "lucide-react";
+import { ECellLogo } from "@/components/ECellLogo";
 
 interface RegisterForm {
   fullName: string;
@@ -70,30 +71,30 @@ export default function Register() {
       <div className="container mx-auto px-6 py-8 relative z-10">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-card/50 backdrop-blur-sm mb-6">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium">E-Cell</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/20 bg-card/50 backdrop-blur-sm mb-4">
+            <ECellLogo size="sm" className="text-primary" />
+            <span className="text-xs font-medium">E-Cell</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
+          <h1 className="text-2xl md:text-3xl font-bold mb-3 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
             Startup Submission Portal
           </h1>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Create Your Account to Submit Your Startup Idea
           </p>
         </div>
 
         {/* Registration Form */}
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-xl mx-auto">
           <Card className="bg-card/50 backdrop-blur-sm border-primary/20">
-            <CardHeader>
-              <CardTitle className="text-center flex items-center justify-center gap-2">
-                <Rocket className="w-5 h-5 text-primary" />
+            <CardHeader className="pb-4">
+              <CardTitle className="text-center flex items-center justify-center gap-2 text-lg">
+                <Rocket className="w-4 h-4 text-primary" />
                 Register Your Account
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <CardContent className="pt-0">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {/* Full Name */}
                   <div className="space-y-2">
                     <Label htmlFor="fullName">Full Name</Label>
@@ -263,14 +264,14 @@ export default function Register() {
                   type="submit"
                   disabled={isSubmitting}
                   className="w-full bg-gradient-primary hover:shadow-glow-primary transition-all duration-300"
-                  size="lg"
+                  size="default"
                 >
                   {isSubmitting ? "Creating Account..." : "Register"}
                 </Button>
 
                 {/* Login Link */}
                 <div className="text-center">
-                  <p className="text-muted-foreground">
+                  <p className="text-sm text-muted-foreground">
                     Already registered?{" "}
                     <Link to="/login" className="text-primary hover:underline">
                       Login here

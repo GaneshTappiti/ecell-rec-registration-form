@@ -9,8 +9,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Sparkles, LogOut, Upload, FileText, Github, Link as LinkIcon, HelpCircle } from "lucide-react";
+import { LogOut, Upload, FileText, Github, Link as LinkIcon, HelpCircle } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { FileUpload } from "@/components/ui/file-upload";
+import { ECellLogo } from "@/components/ECellLogo";
 
 interface SubmissionForm {
   ideaTitle: string;
@@ -20,7 +22,7 @@ interface SubmissionForm {
   detailedExplanation: string;
   startupStage: string;
   phoneNumber: string;
-  pitchDeck: FileList;
+  pitchDeck?: File;
   githubLink?: string;
   driveLink?: string;
   figmaLink?: string;
@@ -40,6 +42,7 @@ export default function Dashboard() {
   const [wordCount, setWordCount] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [pitchDeckFile, setPitchDeckFile] = useState<File | null>(null);
   const { register, handleSubmit, watch, setValue, formState: { errors, isSubmitting } } = useForm<SubmissionForm>();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -73,7 +76,8 @@ export default function Dashboard() {
     // Calculate progress based on filled fields
     const requiredFields = ['ideaTitle', 'problemStatement', 'proposedSolution', 'oneLinerPitch', 'detailedExplanation', 'startupStage'];
     const filledFields = requiredFields.filter(field => watchedFields[field as keyof SubmissionForm]);
-    setProgress((filledFields.length / requiredFields.length) * 100);
+    const totalFields = requiredFields.length;
+    setProgress((filledFields.length / totalFields) * 100);
   }, [watchedFields]);
 
   const handleLogout = () => {
@@ -85,20 +89,25 @@ export default function Dashboard() {
   const onSubmit = async (data: SubmissionForm) => {
     // Simulate submission
     await new Promise(resolve => setTimeout(resolve, 2000));
-    
+
     // Store submission
     const submissionData = {
       ...data,
+      pitchDeck: pitchDeckFile ? {
+        name: pitchDeckFile.name,
+        size: pitchDeckFile.size,
+        type: pitchDeckFile.type
+      } : null,
       submittedAt: new Date().toISOString(),
       userId: user?.rollNumber
     };
     localStorage.setItem("submission", JSON.stringify(submissionData));
-    
+
     toast({
       title: "Startup Idea Submitted Successfully! 🚀",
       description: "Your idea has been received. We'll get back to you soon."
     });
-    
+
     navigate("/confirmation");
   };
 
@@ -142,49 +151,49 @@ export default function Dashboard() {
         
         <div className="container mx-auto px-6 py-8 relative z-10">
           {/* Header */}
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex justify-between items-center mb-6">
             <div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-card/50 backdrop-blur-sm mb-4">
-                <Sparkles className="w-4 h-4 text-primary" />
-                <span className="text-sm font-medium">E-Cell</span>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/20 bg-card/50 backdrop-blur-sm mb-3">
+                <ECellLogo size="sm" className="text-primary" />
+                <span className="text-xs font-medium">E-Cell</span>
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
+              <h1 className="text-xl md:text-2xl font-bold mb-2 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
                 📝 Submit Your Startup Idea
               </h1>
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-3 text-xs text-muted-foreground">
                 <span>Logged in as: <strong>{user.name}</strong> ({user.rollNumber})</span>
-                <Badge variant="outline" className="border-green-500/50 text-green-400">
+                <Badge variant="outline" className="border-green-500/50 text-green-400 text-xs">
                   Form not submitted
                 </Badge>
               </div>
             </div>
-            <Button variant="outline" onClick={handleLogout} className="flex items-center gap-2">
-              <LogOut className="w-4 h-4" />
+            <Button variant="outline" onClick={handleLogout} className="flex items-center gap-2" size="sm">
+              <LogOut className="w-3 h-3" />
               Logout
             </Button>
           </div>
 
           {/* Progress Bar */}
-          <Card className="mb-8 bg-card/50 backdrop-blur-sm border-primary/20">
-            <CardContent className="p-6">
+          <Card className="mb-6 bg-card/50 backdrop-blur-sm border-primary/20">
+            <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium">Form Progress</span>
-                <span className="text-sm text-muted-foreground">{Math.round(progress)}% Complete</span>
+                <span className="text-xs font-medium">Form Progress</span>
+                <span className="text-xs text-muted-foreground">{Math.round(progress)}% Complete</span>
               </div>
-              <Progress value={progress} className="h-2" />
+              <Progress value={progress} className="h-1.5" />
             </CardContent>
           </Card>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Student Details Section */}
             <Card className="bg-card/50 backdrop-blur-sm border-primary/20">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-base">
                   🧍‍♂️ Student Details
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <CardContent className="space-y-3 pt-0">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
                     <Label>Full Name</Label>
                     <Input value={user.name} disabled className="bg-muted/50" />
@@ -222,12 +231,12 @@ export default function Dashboard() {
 
             {/* Startup Idea Section */}
             <Card className="bg-card/50 backdrop-blur-sm border-primary/20">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-base">
                   🚀 Startup Idea Details
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-4 pt-0">
                 {/* Idea Title */}
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
@@ -387,23 +396,22 @@ export default function Dashboard() {
 
             {/* Uploads Section */}
             <Card className="bg-card/50 backdrop-blur-sm border-primary/20">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-base">
                   📁 Supporting Documents & Links
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-4 pt-0">
                 {/* Pitch Deck */}
                 <div className="space-y-2">
-                  <Label htmlFor="pitchDeck" className="flex items-center gap-2">
+                  <Label className="flex items-center gap-2">
                     <Upload className="w-4 h-4" />
                     Pitch Deck (PDF, PPT, PPTX - Max 10MB)
                   </Label>
-                  <Input
-                    id="pitchDeck"
-                    type="file"
+                  <FileUpload
+                    onFileSelect={setPitchDeckFile}
                     accept=".pdf,.ppt,.pptx"
-                    {...register("pitchDeck")}
+                    maxSize={10 * 1024 * 1024}
                     className="bg-background/50"
                   />
                 </div>
@@ -462,13 +470,13 @@ export default function Dashboard() {
               <Button
                 type="submit"
                 disabled={isSubmitting || progress < 100}
-                className="bg-gradient-primary hover:shadow-glow-primary transition-all duration-300 px-12 py-4 text-lg"
-                size="lg"
+                className="bg-gradient-primary hover:shadow-glow-primary transition-all duration-300 px-8 py-2"
+                size="default"
               >
                 {isSubmitting ? "Submitting..." : "🚀 Submit My Startup Idea"}
               </Button>
               {progress < 100 && (
-                <p className="text-sm text-muted-foreground mt-2">
+                <p className="text-xs text-muted-foreground mt-2">
                   Please fill all required fields to submit
                 </p>
               )}
