@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -10,8 +10,10 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Eye, EyeOff, Rocket, CheckCircle, AlertCircle } from "lucide-react";
+import { Eye, EyeOff, Rocket, Loader2 } from "lucide-react";
 import { ECellLogo } from "@/components/ECellLogo";
+import { InfoTooltip } from "@/components/ui/info-tooltip";
+import { PasswordStrength } from "@/components/ui/password-strength";
 
 interface RegisterForm {
   fullName: string;
@@ -19,6 +21,7 @@ interface RegisterForm {
   rollNumber: string;
   branch: string;
   year: string;
+  graduationYear: string;
   phoneNumber: string;
   password: string;
   confirmPassword: string;
@@ -27,49 +30,13 @@ interface RegisterForm {
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [emailValidation, setEmailValidation] = useState<'idle' | 'valid' | 'invalid'>('idle');
-  const [rollValidation, setRollValidation] = useState<'idle' | 'valid' | 'invalid'>('idle');
   const { register, handleSubmit, watch, setValue, formState: { errors, isSubmitting } } = useForm<RegisterForm>();
   const { toast } = useToast();
   const router = useRouter();
 
   const password = watch("password");
-  const email = watch("email");
-  const rollNumber = watch("rollNumber");
 
-  // Real-time email validation
-  useEffect(() => {
-    if (email) {
-      const emailRegex = /^[^\s@]+@raghuenggcollege\.in$/;
-      if (emailRegex.test(email)) {
-        // Simulate checking if email is already registered
-        setTimeout(() => {
-          setEmailValidation('valid');
-        }, 500);
-      } else {
-        setEmailValidation('invalid');
-      }
-    } else {
-      setEmailValidation('idle');
-    }
-  }, [email]);
 
-  // Real-time roll number validation
-  useEffect(() => {
-    if (rollNumber) {
-      const rollRegex = /^[0-9]{2}[A-Z]{2}[0-9]{3}$/;
-      if (rollRegex.test(rollNumber)) {
-        // Simulate checking if roll number is already registered
-        setTimeout(() => {
-          setRollValidation('valid');
-        }, 500);
-      } else {
-        setRollValidation('invalid');
-      }
-    } else {
-      setRollValidation('idle');
-    }
-  }, [rollNumber]);
 
   const onSubmit = async (data: RegisterForm) => {
     if (data.password !== data.confirmPassword) {
@@ -81,27 +48,38 @@ export default function RegisterPage() {
       return;
     }
 
+    if (!data.graduationYear) {
+      toast({
+        title: "Graduation Year Required",
+        description: "Please select your graduation year",
+        variant: "destructive"
+      });
+      return;
+    }
+
     // Simulate registration
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     toast({
       title: "Registration Successful! 🎉",
       description: "Your account has been created successfully."
     });
-    
+
     router.push("/login");
   };
 
   const branches = [
-    "Computer Science Engineering",
-    "Electronics & Communication Engineering", 
-    "Mechanical Engineering",
-    "Civil Engineering",
-    "Electrical Engineering",
-    "Information Technology"
+    "Computer Science Engineering (CSE)",
+    "Electronics & Communication Engineering (ECE)",
+    "Mechanical Engineering (ME)",
+    "Civil Engineering (CE)",
+    "Electrical Engineering (EE)",
+    "Information Technology (IT)"
   ];
 
   const years = ["1st Year", "2nd Year", "3rd Year", "4th Year"];
+
+  const graduationYears = ["2025", "2026", "2027", "2028", "2029", "2030"];
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
@@ -134,11 +112,13 @@ export default function RegisterPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {/* Full Name */}
                   <div className="space-y-2">
-                    <Label htmlFor="fullName">Full Name</Label>
+                    <div className="flex items-center gap-2 min-h-[20px]">
+                      <Label htmlFor="fullName">Full Name</Label>
+                    </div>
                     <Input
                       id="fullName"
                       {...register("fullName", { required: "Full name is required" })}
@@ -152,65 +132,48 @@ export default function RegisterPage() {
 
                   {/* Email */}
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email ID</Label>
-                    <div className="relative">
-                      <Input
-                        id="email"
-                        type="email"
-                        {...register("email", {
-                          required: "Email is required",
-                          pattern: {
-                            value: /^[^\s@]+@raghuenggcollege\.in$/,
-                            message: "Email must end with @raghuenggcollege.in"
-                          }
-                        })}
-                        className="bg-background/50 pr-10"
-                        placeholder="yourname@raghuenggcollege.in"
-                      />
-                      {emailValidation === 'valid' && (
-                        <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-green-500" />
-                      )}
-                      {emailValidation === 'invalid' && (
-                        <AlertCircle className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-destructive" />
-                      )}
+                    <div className="flex items-center gap-2 min-h-[20px]">
+                      <Label htmlFor="email">College Email ID</Label>
+                      <InfoTooltip content="Must be your official college email ending with @raghuenggcollege.in" />
                     </div>
+                    <Input
+                      id="email"
+                      type="email"
+                      {...register("email", {
+                        required: "College email is required",
+                        pattern: {
+                          value: /^[a-zA-Z0-9._%+-]+@raghuenggcollege\.in$/,
+                          message: "Please use your college email ID (@raghuenggcollege.in)"
+                        }
+                      })}
+                      className="bg-background/50"
+                      placeholder="yourname@raghuenggcollege.in"
+                    />
                     {errors.email && (
                       <p className="text-destructive text-sm">{errors.email.message}</p>
-                    )}
-                    {emailValidation === 'valid' && !errors.email && (
-                      <p className="text-green-500 text-sm">✓ Email is available</p>
                     )}
                   </div>
 
                   {/* Roll Number */}
                   <div className="space-y-2">
-                    <Label htmlFor="rollNumber">Roll Number</Label>
-                    <div className="relative">
-                      <Input
-                        id="rollNumber"
-                        {...register("rollNumber", {
-                          required: "Roll number is required",
-                          pattern: {
-                            value: /^[0-9]{2}[A-Z]{2}[0-9]{3}$/,
-                            message: "Format: 21CS101 (2 digits + 2 letters + 3 digits)"
-                          }
-                        })}
-                        className="bg-background/50 pr-10"
-                        placeholder="21CS101"
-                        style={{ textTransform: 'uppercase' }}
-                      />
-                      {rollValidation === 'valid' && (
-                        <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-green-500" />
-                      )}
-                      {rollValidation === 'invalid' && (
-                        <AlertCircle className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-destructive" />
-                      )}
+                    <div className="flex items-center gap-2 min-h-[20px]">
+                      <Label htmlFor="rollNumber">Roll Number</Label>
                     </div>
+                    <Input
+                      id="rollNumber"
+                      {...register("rollNumber", {
+                        required: "Roll number is required",
+                        pattern: {
+                          value: /^[0-9]{2}[A-Z]{2}[0-9]{3}$/,
+                          message: "Format: 21CS101 (2 digits + 2 letters + 3 digits)"
+                        }
+                      })}
+                      className="bg-background/50"
+                      placeholder="21CS101"
+                      style={{ textTransform: 'uppercase' }}
+                    />
                     {errors.rollNumber && (
                       <p className="text-destructive text-sm">{errors.rollNumber.message}</p>
-                    )}
-                    {rollValidation === 'valid' && !errors.rollNumber && (
-                      <p className="text-green-500 text-sm">✓ Roll number is available</p>
                     )}
                   </div>
 
@@ -219,7 +182,7 @@ export default function RegisterPage() {
                     <Label htmlFor="branch">Branch</Label>
                     <Select onValueChange={(value) => setValue("branch", value)}>
                       <SelectTrigger className="bg-background/50">
-                        <SelectValue placeholder="Select your branch" />
+                        <SelectValue placeholder="Select Your Branch" />
                       </SelectTrigger>
                       <SelectContent>
                         {branches.map((branch) => (
@@ -236,10 +199,13 @@ export default function RegisterPage() {
 
                   {/* Year */}
                   <div className="space-y-2">
-                    <Label htmlFor="year">Year</Label>
+                    <div className="flex items-center gap-2">
+                      <Label htmlFor="year">Current Year</Label>
+                      <InfoTooltip content="Select your current academic year" />
+                    </div>
                     <Select onValueChange={(value) => setValue("year", value)}>
                       <SelectTrigger className="bg-background/50">
-                        <SelectValue placeholder="Select your year" />
+                        <SelectValue placeholder="Select Your Year" />
                       </SelectTrigger>
                       <SelectContent>
                         {years.map((year) => (
@@ -254,13 +220,33 @@ export default function RegisterPage() {
                     )}
                   </div>
 
+                  {/* Graduation Year */}
+                  <div className="space-y-2">
+                    <Label htmlFor="graduationYear">Graduation Year</Label>
+                    <Select onValueChange={(value) => setValue("graduationYear", value)}>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select Graduation Year" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {graduationYears.map((year) => (
+                          <SelectItem key={year} value={year}>
+                            {year}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {errors.graduationYear && (
+                      <p className="text-destructive text-sm">Graduation year is required</p>
+                    )}
+                  </div>
+
                   {/* Phone Number */}
                   <div className="space-y-2">
                     <Label htmlFor="phoneNumber">Phone Number</Label>
                     <Input
                       id="phoneNumber"
                       type="tel"
-                      {...register("phoneNumber", { 
+                      {...register("phoneNumber", {
                         required: "Phone number is required",
                         pattern: {
                           value: /^[0-9]{10}$/,
@@ -277,12 +263,15 @@ export default function RegisterPage() {
 
                 {/* Password */}
                 <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
+                  <div className="flex items-center gap-2">
+                    <Label htmlFor="password">Password</Label>
+                    <InfoTooltip content="Use a strong password with at least 8 characters, including uppercase, lowercase, numbers, and special characters" />
+                  </div>
                   <div className="relative">
                     <Input
                       id="password"
                       type={showPassword ? "text" : "password"}
-                      {...register("password", { 
+                      {...register("password", {
                         required: "Password is required",
                         minLength: {
                           value: 6,
@@ -301,6 +290,7 @@ export default function RegisterPage() {
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </Button>
                   </div>
+                  <PasswordStrength password={password || ""} />
                   {errors.password && (
                     <p className="text-destructive text-sm">{errors.password.message}</p>
                   )}
@@ -331,6 +321,13 @@ export default function RegisterPage() {
                   )}
                 </div>
 
+                {/* Privacy Note */}
+                <div className="text-center">
+                  <p className="text-xs text-muted-foreground">
+                    We will never share your data with anyone outside E-Cell REC.
+                  </p>
+                </div>
+
                 {/* Submit Button */}
                 <Button
                   type="submit"
@@ -338,7 +335,14 @@ export default function RegisterPage() {
                   className="w-full bg-gradient-primary hover:shadow-glow-primary transition-all duration-300"
                   size="default"
                 >
-                  {isSubmitting ? "Creating Account..." : "Register"}
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Creating Account...
+                    </>
+                  ) : (
+                    "Register"
+                  )}
                 </Button>
 
                 {/* Login Link */}

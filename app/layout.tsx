@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'E-Cell Startup Portal',
   description: 'Startup Submission Portal for E-Cell, Raghu Engineering College',
-  author: 'Ganesh Tappiti <tappitiganesh@gmail.com>',
+  authors: [{ name: 'Ganesh Tappiti', email: 'tappitiganesh@gmail.com' }],
 }
 
 export default function RootLayout({

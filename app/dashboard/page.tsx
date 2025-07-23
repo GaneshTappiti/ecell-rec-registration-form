@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, Upload, FileText, Github, Link as LinkIcon, HelpCircle, Plus, Trash2 } from "lucide-react";
+import { LogOut, FileText, HelpCircle, Plus, Trash2 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { FileUpload } from "@/components/ui/file-upload";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -45,7 +45,6 @@ export default function DashboardPage() {
   const [wordCount, setWordCount] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [pitchDeckFile, setPitchDeckFile] = useState<File | null>(null);
   const [supportingLinks, setSupportingLinks] = useState<{type: string, url: string}[]>([]);
   const { register, handleSubmit, watch, setValue, formState: { errors, isSubmitting } } = useForm<SubmissionForm>();
   const { toast } = useToast();
@@ -503,20 +502,11 @@ export default function DashboardPage() {
                     </Tooltip>
                   </div>
                   <FileUpload
-                    onFileSelect={(file) => {
-                      setPitchDeckFile(file);
-                      setValue("pitchDeck", file);
-                    }}
+                    onFileSelect={(file) => setValue("pitchDeck", file)}
                     accept=".pdf,.ppt,.pptx"
                     maxSize={10 * 1024 * 1024} // 10MB
                     className="border-2 border-dashed border-primary/20 hover:border-primary/40 transition-colors"
                   />
-                  {pitchDeckFile && (
-                    <div className="flex items-center gap-2 text-sm text-green-600">
-                      <FileText className="w-4 h-4" />
-                      <span>{pitchDeckFile.name}</span>
-                    </div>
-                  )}
                 </div>
 
                 <div className="space-y-4">

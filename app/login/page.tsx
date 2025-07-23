@@ -9,8 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Eye, EyeOff, LogIn } from "lucide-react";
+import { Eye, EyeOff, LogIn, Key, Loader2 } from "lucide-react";
 import { ECellLogo } from "@/components/ECellLogo";
+import { InfoTooltip } from "@/components/ui/info-tooltip";
 
 interface LoginForm {
   emailOrRoll: string;
@@ -24,9 +25,19 @@ export default function LoginPage() {
   const router = useRouter();
 
   const onSubmit = async (data: LoginForm) => {
+    // Check if email is provided and validate domain
+    if (data.emailOrRoll.includes('@') && !data.emailOrRoll.endsWith('@raghuenggcollege.in')) {
+      toast({
+        title: "Invalid Email Domain",
+        description: "Please use your college email ID (@raghuenggcollege.in)",
+        variant: "destructive"
+      });
+      return;
+    }
+
     // Simulate login
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     // Store user session (in real app, this would be handled by authentication service)
     localStorage.setItem("user", JSON.stringify({
       name: "Ganesh Kumar",
@@ -36,12 +47,12 @@ export default function LoginPage() {
       year: "3rd Year",
       phone: "9876543210"
     }));
-    
+
     toast({
       title: "Login Successful! 🎉",
       description: "Welcome back to the startup portal."
     });
-    
+
     router.push("/dashboard");
   };
 
@@ -76,16 +87,27 @@ export default function LoginPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
                 {/* Email or Roll Number */}
                 <div className="space-y-2">
-                  <Label htmlFor="emailOrRoll">Email ID or Roll Number</Label>
+                  <div className="flex items-center gap-2">
+                    <Label htmlFor="emailOrRoll">College Email ID</Label>
+                    <InfoTooltip content="Use your college email ID ending with @raghuenggcollege.in" />
+                  </div>
                   <Input
                     id="emailOrRoll"
-                    {...register("emailOrRoll", { required: "Email or roll number is required" })}
+                    {...register("emailOrRoll", {
+                      required: "College email ID is required",
+                      validate: (value) => {
+                        if (value.includes('@') && !value.endsWith('@raghuenggcollege.in')) {
+                          return "Please use your college email ID (@raghuenggcollege.in)";
+                        }
+                        return true;
+                      }
+                    })}
                     autoFocus
                     className="bg-background/50"
-                    placeholder="Enter your email or roll number"
+                    placeholder="yourname@raghuenggcollege.in"
                   />
                   {errors.emailOrRoll && (
                     <p className="text-destructive text-sm">{errors.emailOrRoll.message}</p>
@@ -119,7 +141,8 @@ export default function LoginPage() {
 
                 {/* Forgot Password */}
                 <div className="text-right">
-                  <Link href="/forgot-password" className="text-sm text-primary hover:underline">
+                  <Link href="/forgot-password" className="text-sm text-primary hover:underline inline-flex items-center gap-1">
+                    <Key className="w-3 h-3" />
                     Forgot password?
                   </Link>
                 </div>
@@ -131,7 +154,14 @@ export default function LoginPage() {
                   className="w-full bg-gradient-primary hover:shadow-glow-primary transition-all duration-300"
                   size="default"
                 >
-                  {isSubmitting ? "Logging in..." : "Login"}
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Logging in...
+                    </>
+                  ) : (
+                    "Login"
+                  )}
                 </Button>
 
                 {/* Register Link */}
