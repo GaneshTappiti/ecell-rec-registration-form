@@ -164,12 +164,12 @@ export default function RegisterPage() {
                       {...register("rollNumber", {
                         required: "Roll number is required",
                         pattern: {
-                          value: /^[0-9]{2}[A-Z]{2}[0-9]{3}$/,
-                          message: "Format: 21CS101 (2 digits + 2 letters + 3 digits)"
+                          value: /^[0-9A-Za-z]{8,15}$/,
+                          message: "Please enter a valid roll number (8-15 characters, letters and numbers only)"
                         }
                       })}
                       className="bg-background/50"
-                      placeholder="21CS101"
+                      placeholder="23981A42U4"
                       style={{ textTransform: 'uppercase' }}
                     />
                     {errors.rollNumber && (
